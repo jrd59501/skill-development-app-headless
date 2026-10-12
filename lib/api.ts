@@ -119,3 +119,36 @@ export async function getPostAndMorePosts(
     morePosts: extractPostEntries(entries),
   };
 }
+// ===== RECIPES (my custom content type) =====
+
+// Gets all the recipes from Contentful
+export async function getAllRecipes() {
+  // The same query that worked in Playground
+  const query = `
+    query {
+      recipeCollection {
+        items {
+          title
+          slug
+          category
+          ingredients
+          image {
+            url
+          }
+        }
+      }
+    }
+  `;
+
+  // Send the query to Contentful
+  const response = await fetchGraphQL(query);
+
+  // If nothing came back, return an empty list so the page doesn't crash
+  if (!response.data) {
+    console.log("Could not get recipes");
+    return [];
+  }
+
+  // Send back the list of recipes
+  return response.data.recipeCollection.items;
+}
