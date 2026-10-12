@@ -1,6 +1,9 @@
 import { draftMode } from "next/headers";
+import { redirect } from "next/navigation";
 
-export async function GET(request: Request) {
-  (await draftMode()).disable();
-  return new Response("Draft mode is disabled");
+// Turns draft mode off and goes back to the home page
+export async function GET() {
+  const draft = await draftMode();
+  draft.disable();
+  redirect("/");
 }
